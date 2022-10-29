@@ -1,7 +1,14 @@
+/* 
+    Code by @satosempai
+    VK: https://vk.com/satosempai
+*/
+
+
 const base = JSON.parse(localStorage.getItem('vk-users-brute-fs')) || [];
 const messages = {
     request_limit: "К сожалению, вы не можете добавлять больше друзей за один день. Пожалуйста, попробуйте завтра."
 }
+const time = 10000;
 let addBtn = document.querySelectorAll(".friends_find_user_add");
 let counter = 0;
 let scroll_counter = 10000;
@@ -25,25 +32,34 @@ if(origin == 'https://vk.com') {
 
 let friends = 0;
 function getFriends() {
+    let a,b,c;
     console.warn("Открываем список друзей...")
     nav.go('https://vk.com/friends?section=all');
-    setTimeout(() => {
+    a = setTimeout(() => {
         console.warn(`Получаем количество друзей...`);
-        friends = document.querySelector("#friends_tab_all a span").innerText;
+        try {
+            friends = document.querySelector("#friends_tab_all a span").innerText;
+        } catch (e) {
+            console.log('Не удалось получить список друзей.');
+            console.error(e);
+            clearInterval(b);
+            clearInterval(c);
+            stop();
+        }
     }, 2000);
-    setTimeout(() => {
+    b = setTimeout(() => {
         console.warn('Закрываем список друзей...');
         nav.go('https://vk.com/friends?act=find');
-    }, 3000);
-    setTimeout(() => {
+    }, 4000);
+    c = setTimeout(() => {
         console.warn(`Готово!`);
         console.log(`%cДрузей: ${friends}\nВсего отправленных заявок: ${base.length}\nВаш ID: ${vk.id}`, 'color: orange;');
-    }, 4000);
+    }, 6000);
 }
 getFriends();
 
-
-const init = setInterval(run, 10000);
+// START
+const init = setInterval(run, time);
 function run() {
     if(document.body.innerText.indexOf(messages.request_limit) > -1) {
         stop();
