@@ -44,7 +44,7 @@ function getFriends() {
             console.error(e);
             clearInterval(b);
             clearInterval(c);
-            stop();
+            // stop();
         }
     }, 2000);
     b = setTimeout(() => {
