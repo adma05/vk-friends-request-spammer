@@ -93,8 +93,8 @@ function run() {
         setTimeout(() => {
             console.warn("Загружаем пользователей...");
         }, 600);
+        scroll_counter = scroll_counter + 999999;
         scroll(0, scroll_counter);
-        scroll_counter = scroll_counter + 10000000;
     }
     counter++;
     saveBase('vk-users-brute-fs', base);
