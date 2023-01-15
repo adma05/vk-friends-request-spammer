@@ -1,4 +1,4 @@
-/* 
+ /* 
     Code by @satosempai
     VK: https://vk.com/satosempai
 */
@@ -39,27 +39,33 @@ function getFriends() {
         console.warn(`Получаем количество друзей...`);
         try {
             friends = document.querySelector("#friends_tab_all a span").innerText;
+            if(isNaN(+friends))  {
+                friends = document.querySelector("#friends_tab_all a").querySelectorAll("span")[1].innerText;
+            }
         } catch (e) {
-            console.log('Не удалось получить список друзей.');
             console.error(e);
-            clearInterval(b);
-            clearInterval(c);
+            console.error('Не удалось получить список друзей.');
+            clearTimeout(b);
+            clearTimeout(c);
             // stop();
+            nav.go('https://vk.com/friends?act=find');
         }
-    }, 2000);
+    }, 4000);
     b = setTimeout(() => {
         console.warn('Закрываем список друзей...');
         nav.go('https://vk.com/friends?act=find');
-    }, 4000);
+    }, 5000);
     c = setTimeout(() => {
         console.warn(`Готово!`);
-        console.log(`%cДрузей: ${friends}\nВсего отправленных заявок: ${base.length}\nВаш ID: ${vk.id}`, 'color: orange;');
-    }, 6000);
+        console.log(`Друзей: %c${friends}\n%cВсего отправленных заявок: %c${base.length}\n%cИнтервал: %c${time/1000} с.\n%cВаш ID: %c${vk.id}`, 'color: orange;', 'color: white;', 'color: orange;', 'color: white;', 'color: orange;', 'color: white;', 'color: orange;');
+    }, 7000);
 }
 getFriends();
 
 // START
 const init = setInterval(run, time);
+
+
 function run() {
     if(document.body.innerText.indexOf(messages.request_limit) > -1) {
         stop();
@@ -79,19 +85,19 @@ function run() {
             getFriends();
             return;
         }
-        console.log(`%cПользователь: ${user.name}\nID: ${user.id}\nСтатус: 200\nВыполнено: ${counter}/${addBtn.length}`, 'color: green;');
+        console.log(`Пользователь: %c${user.name}\n%cID: %c${user.id}\n%cСтатус: %c200\n%cВыполнено: %c ${counter}/${addBtn.length}`, 'color: gold;', 'color: #DEE0E3;', 'color: gold;', 'color: #DEE0E3;', 'color: gold;', 'color: #DEE0E3;', 'color: gold;');
     }, 500);
     base.push(user);
     addBtn[counter].click();
-    scroll(0, scroll_counter);
-    scroll_counter = scroll_counter + 10000;
+    if(counter == (addBtn.length) - 1) {
+        setTimeout(() => {
+            console.warn("Загружаем пользователей...");
+        }, 600);
+        scroll(0, scroll_counter);
+        scroll_counter = scroll_counter + 10000000;
+    }
     counter++;
     saveBase('vk-users-brute-fs', base);
-    if(counter == addBtn.length) {
-        stop();
-        console.log('Все пользоватли были добавлены.');
-        return;
-    }
 }
 
 function stop() {
